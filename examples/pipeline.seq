@@ -1,0 +1,14 @@
+# Hand-off between CI stages.
+participant Dev
+participant CI
+participant Reg
+
+Dev -> CI: push main
+CI -> CI: build and test
+alt tests pass
+  CI -> Reg: publish 0.1.1
+  Reg --> CI: 200 ok
+  CI --> Dev: green
+else tests fail
+  CI --> Dev: log excerpt
+end

@@ -1,4 +1,4 @@
 import {
 }
 
-pkgtype(kind: "lib")
+pkgtype(kind: "library")

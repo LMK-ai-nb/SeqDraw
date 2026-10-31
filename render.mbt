@@ -227,6 +227,17 @@ pub fn render(d : Diagram) -> String {
           content_w = need
         }
       }
+      Note(nt) => {
+        let a = index_of_participant(d, nt.from)
+        let b = index_of_participant(d, nt.to)
+        let lo = if a < b { a } else { b }
+        let hi = if a < b { b } else { a }
+        let need = margin + centers[hi] + text_width(nt.text) + 6
+        let _ = lo
+        if need > content_w {
+          content_w = need
+        }
+      }
       _ => ()
     }
   }
@@ -311,8 +322,22 @@ pub fn render(d : Diagram) -> String {
         let b = index_of_participant(d, nt.to)
         let ca = margin + centers[a]
         let cb = margin + centers[b]
-        let lo = if ca < cb { ca } else { cb }
-        let hi = if ca < cb { cb } else { ca }
+        let mut lo = if ca < cb { ca } else { cb }
+        let mut hi = if ca < cb { cb } else { ca }
+        let need = text_width(nt.text) + 4
+        if hi - lo + 1 < need {
+          let mid = (lo + hi) / 2
+          let half = need / 2
+          lo = mid - half
+          if lo < 0 {
+            lo = 0
+          }
+          hi = lo + need - 1
+          if hi >= width {
+            hi = width - 1
+            lo = hi - need + 1
+          }
+        }
         let inner = hi - lo - 1
         let top_row = body_row(width, centers, margin)
         put_cell(top_row, lo, '╭')

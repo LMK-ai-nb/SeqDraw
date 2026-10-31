@@ -1,0 +1,18 @@
+# Payment authorisation with a self message and an optional capture.
+participant U as User
+participant S as Shop
+participant P as Payment
+
+U -> S: pay order 42
+S -> S: check stock
+S -> P: authorize 42
+alt authorized
+  P --> S: auth id
+  S --> U: order confirmed
+  loop until captured
+    P -> P: retry capture
+  end
+else declined
+  P --> S: decline code
+  S --> U: retry with another card
+end

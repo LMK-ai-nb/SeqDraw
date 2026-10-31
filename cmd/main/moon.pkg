@@ -1,0 +1,7 @@
+import {
+  "LMK-ai-nb/seqdraw",
+  "moonbitlang/x/fs",
+  "moonbitlang/core/env",
+}
+
+pkgtype(kind: "executable")

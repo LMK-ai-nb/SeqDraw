@@ -1,0 +1,16 @@
+# A login flow with a retry loop.
+participant C as Client
+participant A as API
+participant D as Database
+
+C -> A: POST /login
+A -> D: SELECT user
+D --> A: row
+alt password ok
+  A --> C: 200 token
+else password bad
+  A --> C: 401
+  C -> A: POST /login (retry)
+  A --> C: 200 token
+end
+note over C,A: token cached for 15 minutes
